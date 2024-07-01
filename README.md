@@ -2,4 +2,4 @@
 
 ## INTRODUCTION
 
-Flight data analysis involves examining and interpreting data collected from aircraft systems, sensors, and operational records to improve safety, efficiency, and performance in aviation. It encompasses tasks such as analyzing flight trajectories, monitoring engine parameters, identifying anomalies, and optimizing flight operations based on data-driven insights
+This project focuses on analyzing flight data to gain insights into various aspects of flight operations. Using Python and its powerful libraries, we perform data cleaning, manipulation, exploratory data analysis (EDA), visualization, and machine learning tasks to understand patterns and make predictions.
