@@ -13,7 +13,7 @@ def addMinutes(time, mins):
     return (pd.to_timedelta(time) + pd.Timedelta(minutes=mins))
 
 
-st.cache_data()
+@st.cache_data
 def load_data():
     df = pd.read_csv('flight_data.csv', index_col=0)
     #Cleaning and formatting time columns
@@ -73,9 +73,9 @@ buzAir = df.groupby(['dest'])['dest'].count().sort_values(ascending=False)
 fig3 = px.bar(buzAir, x=buzAir.index, y=buzAir.values, color=buzAir.index, title='Busiest airport in terms of flights arrival')
 st.plotly_chart(fig3, use_container_width=True)
 
-st.subheader('Busiest day of the week in terms of flights departure')
+st.subheader('Busiest day of the month in terms of flights departure')
 buzDay = df.groupby(['day'])['day'].count()
-fig4 = px.bar(buzDay, x=buzDay.index, y=buzDay.values, color=buzDay.index, title='Busiest day of the week in terms of flights departure')
+fig4 = px.bar(buzDay, x=buzDay.index, y=buzDay.values, color=buzDay.index, title='Busiest day of the month in terms of flights departure')
 st.plotly_chart(fig4, use_container_width=True)
 
 st.subheader('Flights frequency across months')
@@ -92,7 +92,7 @@ c1, c2 = st.columns(2)
 c1.dataframe(depStatus, use_container_width=True)
 c2.dataframe(arrStatus, use_container_width=True)
 
-st.info('Out of 336776 flights, 200089(59.1%) flights in 2013 were departed on time, 128432(38.1%) were delayed and just 8255(2.5%) of flights were canceled.')
+st.info('Out of 336776 flights, 200089(59.4%) flights in 2013 were departed on time, 128432(38.1%) were delayed and just 8255(2.5%) of flights were canceled.')
 
 # visualize
 fig6 = px.pie(depStatus, depStatus.index, depStatus.values)
@@ -111,8 +111,8 @@ st.dataframe(depAir, use_container_width=True)
 arrAir = df.loc[df['arr_status'] == 'Late'].groupby(['origin','arr_status'])['arr_status'].count().unstack('arr_status')
 st.dataframe(arrAir, use_container_width=True)
 
-st.info('EWR airport has the highest number of departure delays and JFK airport has the highest number of arrival delays.')
-st.info('LGA airport is best in terms of departure and arrival delay, where as EWR is worst with 5000+ delayed flights.')
+st.info('EWR airport has the highest number of both departure delays and arrival delays.')
+st.info('LGA airport is best in terms of departure and arrival delay, where as EWR is worst with 50000+ delayed flights.')
 
 # visualize
 c1, c2 = st.columns(2)
@@ -197,37 +197,37 @@ st.plotly_chart(fig15, use_container_width=True)
 st.subheader('Best and worst carrier w.r.t total flight canceled')
 canCarrier = df.loc[df['dep_status'] == 'Canceled'].groupby(['carrier','dep_status'])['dep_status'].count().unstack('dep_status')
 canCarrier['total'] = df.groupby(['carrier'])['carrier'].count()
-canCarrier.sort_values(by='total', ascending=False, inplace=True)
+canCarrier.sort_values(by='Canceled', ascending=False, inplace=True)
 
 st.dataframe(canCarrier, use_container_width=True)
-st.info('UA carrier has the highest number of flight cancellation ')
-st.info('AS, F9 and OO carriers are best in terms of flight cancellation.')
+st.info('EV carrier has the highest number of flight cancellation ')
+st.info('HA carrier had no canceled flights, followed by AS, F9 and OO with the fewest.')
 # visualize
-fig16 = px.bar(canCarrier, x=canCarrier.index, y=canCarrier['total'], color=canCarrier.index, title='Flight cancellation count')
+fig16 = px.bar(canCarrier, x=canCarrier.index, y=canCarrier['Canceled'], color=canCarrier.index, title='Flight cancellation count')
 st.plotly_chart(fig16, use_container_width=True)
 
 st.subheader('Flight cancellation across months')
 canMonth = df.loc[df['dep_status'] == 'Canceled'].groupby(['month','dep_status'])['dep_status'].count().unstack('dep_status')
 canMonth['total'] = df.groupby(['month'])['month'].count()
-canMonth.sort_values(by='total', ascending=False, inplace=True)
+canMonth.sort_values(by='Canceled', ascending=False, inplace=True)
 
 st.dataframe(canMonth, use_container_width=True)
 st.info('Flight cancellation is lowest in October and November months')
 
 # visualize
-fig17 = px.bar(canMonth, x=canMonth.index, y=canMonth['total'], color=canMonth.index, title='Flight cancellation count')
+fig17 = px.bar(canMonth, x=canMonth.index, y=canMonth['Canceled'], color=canMonth.index, title='Flight cancellation count')
 st.plotly_chart(fig17, use_container_width=True)
 
 st.subheader("Conclusion")
 st.markdown('''
-    * EWR airport has the highest number of departure delays and JFK airport has the highest number of arrival delays.
-    * LGA airport is best in terms of departure and arrival delay, where as EWR is worst with 5000+ delayed flights.
+    * EWR airport has the highest number of both departure delays and arrival delays.
+    * LGA airport is best in terms of departure and arrival delay, where as EWR is worst with 50000+ delayed flights.
     * EWR airport has the highest percentage of departure delays and LGA airport has the lowest percentage of departure delays.
     * WN carrier has the highest percentage of departure delays and HA carrier has the lowest percentage of departure delays.
     * As we can see from the above graph, flights delay is more in June, July and December months, where as September is best month to travel.
     * JFK-LAX route had most number of flight delay in 2013.
     * 1863 flights got canceled from JFK airport in 2013, which is lowest among all.
-    * UA carrier has the highest number of flight cancellation.
-    * AS, F9 and OO carriers are best in terms of flight cancellation.
+    * EV carrier has the highest number of flight cancellation.
+    * HA carrier had no canceled flights, followed by AS, F9 and OO with the fewest.
     * Flight cancellation is lowest in October and November months.
 ''')

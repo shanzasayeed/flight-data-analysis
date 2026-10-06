@@ -1,0 +1,8 @@
+streamlit==1.65.0
+pandas==2.3.3
+numpy==2.3.5
+plotly==7.1.0
+seaborn==0.13.2
+matplotlib==3.10.0
+ydata-profiling==4.18.4
+setuptools<81
